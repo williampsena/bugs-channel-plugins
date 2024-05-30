@@ -1,0 +1,3 @@
+{"event_id":"70872dd60777409396331a7f06a38039","sent_at":"2024-05-21T00:27:21.484976Z","trace":{"trace_id":"31c10ec554f84c6cb47af91475ae5260","environment":"production","public_key":"key","sample_rate":1.0}}
+{"type":"client_report","content_type":"application/json","length":1898}
+{"type": "discarded_event", "count": 1 }
