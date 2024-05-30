@@ -71,6 +71,7 @@ func (d *EventsLoggerDispatcher) DispatchMany(events []Event) error {
 	return nil
 }
 
+// Creates a new logger dispatcher
 func NewLoggerDispatcher() *EventsLoggerDispatcher {
 	return &EventsLoggerDispatcher{}
 }
