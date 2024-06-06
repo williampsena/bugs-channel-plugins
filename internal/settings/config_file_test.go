@@ -15,13 +15,10 @@ func TestParseConfigFileSuccess(t *testing.T) {
 
 	assert.Equal(t,
 		&ConfigFile{
-			Version: "1",
-			Org:     "foo",
 			Services: []ConfigFileService{
 				{
-					Id:       "1",
-					Name:     "foo bar service",
-					Platform: "python",
+					Id:   "1",
+					Name: "foo bar service",
 					AuthKeys: []ConfigFileServiceAuthKey{
 						{
 							Key:       "key",
@@ -39,7 +36,6 @@ func TestParseConfigFileSuccess(t *testing.T) {
 							ExpiredAt: 0,
 						},
 					},
-					Settings: ConfigFileServiceSettings{RateLimit: 1},
 				},
 			},
 		}, configFile)

@@ -16,10 +16,6 @@ var ErrConfigFileNotFound = errors.New("an error occurred when trying to read th
 
 // Represents the configuration file structure from a YAML file.
 type ConfigFile struct {
-	// Configuration version
-	Version string `yaml:"version"`
-	// The organization
-	Org string `yaml:"org"`
 	// The service list
 	Services []ConfigFileService `yaml:"services"`
 }
@@ -30,12 +26,8 @@ type ConfigFileService struct {
 	Id string `yaml:"id"`
 	// Name of Service
 	Name string `yaml:"name"`
-	// The platform
-	Platform string `yaml:"platform"`
 	// Authentication keys
 	AuthKeys []ConfigFileServiceAuthKey `yaml:"auth_keys"`
-	// Service settings
-	Settings ConfigFileServiceSettings `yaml:"settings"`
 }
 
 // Represents service authentication key of the configuration file
@@ -46,12 +38,6 @@ type ConfigFileServiceAuthKey struct {
 	Disabled bool `yaml:"disabled"`
 	// Unix time represents when the key will expire.
 	ExpiredAt int64 `yaml:"expired_at"`
-}
-
-// Represents service settings of the configuration file
-type ConfigFileServiceSettings struct {
-	// The request limit per seconds
-	RateLimit int `yaml:"rate_limit"`
 }
 
 // Read a yaml configuration file into ConfigFile struct.
