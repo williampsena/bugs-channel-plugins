@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	settings "github.com/williampsena/bugs-channel-plugins/internal"
+	"github.com/williampsena/bugs-channel-plugins/internal/settings"
 	"github.com/williampsena/bugs-channel-plugins/pkg/service"
 )
 

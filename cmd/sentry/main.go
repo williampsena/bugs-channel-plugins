@@ -2,7 +2,7 @@ package main
 
 import (
 	log "github.com/sirupsen/logrus"
-	settings "github.com/williampsena/bugs-channel-plugins/internal"
+	settings "github.com/williampsena/bugs-channel-plugins/internal/settings"
 	"github.com/williampsena/bugs-channel-plugins/pkg/config"
 	"github.com/williampsena/bugs-channel-plugins/pkg/logger"
 	"github.com/williampsena/bugs-channel-plugins/pkg/sentry"
