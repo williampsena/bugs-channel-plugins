@@ -5,7 +5,7 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/williampsena/bugs-channel-plugins/pkg/settings"
+	settings "github.com/williampsena/bugs-channel-plugins/internal"
 )
 
 // Represents an error when service is not found

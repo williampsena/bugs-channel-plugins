@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/williampsena/bugs-channel-plugins/pkg/settings"
+	settings "github.com/williampsena/bugs-channel-plugins/internal"
 )
 
 func TestGetServiceSuccess(t *testing.T) {

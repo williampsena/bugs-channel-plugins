@@ -2,11 +2,11 @@ package main
 
 import (
 	log "github.com/sirupsen/logrus"
+	settings "github.com/williampsena/bugs-channel-plugins/internal"
 	"github.com/williampsena/bugs-channel-plugins/pkg/config"
 	"github.com/williampsena/bugs-channel-plugins/pkg/logger"
 	"github.com/williampsena/bugs-channel-plugins/pkg/sentry"
 	"github.com/williampsena/bugs-channel-plugins/pkg/service"
-	"github.com/williampsena/bugs-channel-plugins/pkg/settings"
 )
 
 func init() {
