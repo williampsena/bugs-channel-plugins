@@ -99,13 +99,23 @@ func buildRouter(serviceFetcher service.ServiceFetcher) *mux.Router {
 }
 
 func SetupServer(serviceFetcher service.ServiceFetcher) {
+	srv := BuildServer(serviceFetcher)
+
+	go srv.ListenAndServe()
+
+	Greetings(srv)
+
+	srv.GraceFulShutDown(time.Second * 5)
+}
+
+func Greetings(srv *Server) {
+	srv.log.Infof("🐜 Sentry Plugin Sever listening at port %v...", config.SentryPort())
+}
+
+func BuildServer(serviceFetcher service.ServiceFetcher) *Server {
 	r := buildRouter(serviceFetcher)
 
 	srv := NewServer(r, logrus.StandardLogger())
 
-	go srv.ListenAndServe()
-
-	srv.log.Infof("🐜 Sentry Plugin Sever listening at port %v...", config.SentryPort())
-
-	srv.GraceFulShutDown(time.Second * 5)
+	return srv
 }
