@@ -53,13 +53,13 @@ func (s *Server) GraceFulShutDown(killTime time.Duration) {
 
 	defer cancel()
 
-	s.log.Print("🛑 The server has been shut down.")
+	s.log.Print("🛑 The sentry server has been shut down.")
 
 	if err := s.Srv.Shutdown(ctx); err != nil {
-		s.log.Fatalf("❌ Unexpected interruption to the server's listening: %s\n", err)
+		s.log.Fatalf("❌ Unexpected interruption to the sentry server's listening: %s\n", err)
 	}
 
-	s.log.Print("❎ The server exited properly")
+	s.log.Print("❎ The sentry server exited properly")
 
 }
 
@@ -70,7 +70,7 @@ func (s *Server) ListenAndServe() error {
 
 // Shutdown terminates the handlers for HTTP.
 func (s *Server) Shutdown(ctx context.Context) error {
-	s.log.Print("🛑 The server was shut down.")
+	s.log.Print("🛑 The sentry server was shut down.")
 	return s.Srv.Shutdown(ctx)
 }
 
