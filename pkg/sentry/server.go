@@ -20,18 +20,31 @@ import (
 
 // Represents the HTTP handlers and router instances.
 type Server struct {
-	Router http.Handler
-	Srv    *http.Server
-	log    *logrus.Logger
+	Router  http.Handler
+	Srv     *http.Server
+	log     *logrus.Logger
+	Context ServerContext
+}
+
+// Represents the server context
+type ServerContext struct {
+	context.Context
+
+	// The service fetcher instance
+	ServiceFetcher service.ServiceFetcher
+
+	// The event dispatcher instance
+	EventsDispatcher event.EventsDispatcher
 }
 
 // Creates and returns a new instance of Server
-func NewServer(handler http.Handler, log *logrus.Logger) *Server {
+func NewServer(c ServerContext, handler http.Handler, log *logrus.Logger) *Server {
 	ch := gorilla.CORS(gorilla.AllowedOrigins([]string{"*"}))
 
 	return &Server{
-		Router: handler,
-		log:    log,
+		Context: c,
+		Router:  handler,
+		log:     log,
 		Srv: &http.Server{
 			Addr:         fmt.Sprintf(":%v", config.SentryPort()),
 			Handler:      ch(handler),
@@ -49,7 +62,7 @@ func (s *Server) GraceFulShutDown(killTime time.Duration) {
 
 	<-shutdown
 
-	ctx, cancel := context.WithTimeout(context.Background(), killTime)
+	ctx, cancel := context.WithTimeout(s.Context, killTime)
 
 	defer cancel()
 
@@ -78,15 +91,15 @@ func loggingMiddleware(next http.Handler) http.Handler {
 	return gorilla.LoggingHandler(os.Stdout, next)
 }
 
-func buildRouter(serviceFetcher service.ServiceFetcher) *mux.Router {
+func buildRouter(c ServerContext) *mux.Router {
 	r := mux.NewRouter()
 
 	r.PathPrefix("/health").HandlerFunc(HealthCheckEndpoint).Methods("GET")
 
 	api := r.PathPrefix("/api/{id:[0-9]+}").Subrouter()
-	api.Use(AuthKeyMiddleware(serviceFetcher))
+	api.Use(AuthKeyMiddleware(c.ServiceFetcher))
 	api.PathPrefix("/envelope").
-		HandlerFunc(PostEventEndpoint(event.NewLoggerDispatcher())).
+		HandlerFunc(PostEventEndpoint(c.EventsDispatcher)).
 		Methods("POST")
 
 	r.PathPrefix("/").HandlerFunc(NoRouteEndpoint)
@@ -98,8 +111,8 @@ func buildRouter(serviceFetcher service.ServiceFetcher) *mux.Router {
 	return r
 }
 
-func SetupServer(serviceFetcher service.ServiceFetcher) {
-	srv := BuildServer(serviceFetcher)
+func SetupServer(c ServerContext) {
+	srv := BuildServer(c)
 
 	go srv.ListenAndServe()
 
@@ -112,10 +125,10 @@ func Greetings(srv *Server) {
 	srv.log.Infof("🐜 Sentry Plugin Sever listening at port %v...", config.SentryPort())
 }
 
-func BuildServer(serviceFetcher service.ServiceFetcher) *Server {
-	r := buildRouter(serviceFetcher)
+func BuildServer(c ServerContext) *Server {
+	r := buildRouter(c)
 
-	srv := NewServer(r, logrus.StandardLogger())
+	srv := NewServer(c, r, logrus.StandardLogger())
 
 	return srv
 }

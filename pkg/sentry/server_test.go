@@ -1,6 +1,7 @@
 package sentry
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -9,11 +10,18 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/williampsena/bugs-channel-plugins/internal/settings"
+	"github.com/williampsena/bugs-channel-plugins/pkg/event"
 	"github.com/williampsena/bugs-channel-plugins/pkg/service"
 )
 
 func TestServer(t *testing.T) {
-	router := buildRouter(buildServiceFetcher(t))
+	serverContext := ServerContext{
+		Context:          context.Background(),
+		ServiceFetcher:   buildServiceFetcher(t),
+		EventsDispatcher: event.NewLoggerDispatcher(),
+	}
+
+	router := buildRouter(serverContext)
 
 	svr := httptest.NewServer(router)
 
