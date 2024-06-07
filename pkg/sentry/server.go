@@ -111,9 +111,7 @@ func buildRouter(c *ServerContext) *mux.Router {
 	return r
 }
 
-func SetupServer(c *ServerContext) {
-	srv := BuildServer(c)
-
+func SetupServer(srv *Server) {
 	go srv.ListenAndServe()
 
 	Greetings(srv)

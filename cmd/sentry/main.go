@@ -29,5 +29,6 @@ func main() {
 		EventsDispatcher: event.NewLoggerDispatcher(),
 	}
 
-	sentry.SetupServer(&serverContext)
+	server := sentry.BuildServer(&serverContext)
+	sentry.SetupServer(server)
 }
