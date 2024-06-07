@@ -23,7 +23,7 @@ type Server struct {
 	Router  http.Handler
 	Srv     *http.Server
 	log     *logrus.Logger
-	Context ServerContext
+	Context *ServerContext
 }
 
 // Represents the server context
@@ -38,7 +38,7 @@ type ServerContext struct {
 }
 
 // Creates and returns a new instance of Server
-func NewServer(c ServerContext, handler http.Handler, log *logrus.Logger) *Server {
+func NewServer(c *ServerContext, handler http.Handler, log *logrus.Logger) *Server {
 	ch := gorilla.CORS(gorilla.AllowedOrigins([]string{"*"}))
 
 	return &Server{
@@ -91,7 +91,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 	return gorilla.LoggingHandler(os.Stdout, next)
 }
 
-func buildRouter(c ServerContext) *mux.Router {
+func buildRouter(c *ServerContext) *mux.Router {
 	r := mux.NewRouter()
 
 	r.PathPrefix("/health").HandlerFunc(HealthCheckEndpoint).Methods("GET")
@@ -111,7 +111,7 @@ func buildRouter(c ServerContext) *mux.Router {
 	return r
 }
 
-func SetupServer(c ServerContext) {
+func SetupServer(c *ServerContext) {
 	srv := BuildServer(c)
 
 	go srv.ListenAndServe()
@@ -125,7 +125,7 @@ func Greetings(srv *Server) {
 	srv.log.Infof("🐜 Sentry Plugin Sever listening at port %v...", config.SentryPort())
 }
 
-func BuildServer(c ServerContext) *Server {
+func BuildServer(c *ServerContext) *Server {
 	r := buildRouter(c)
 
 	srv := NewServer(c, r, logrus.StandardLogger())

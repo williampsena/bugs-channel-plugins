@@ -21,7 +21,7 @@ func TestServer(t *testing.T) {
 		EventsDispatcher: event.NewLoggerDispatcher(),
 	}
 
-	router := buildRouter(serverContext)
+	router := buildRouter(&serverContext)
 
 	svr := httptest.NewServer(router)
 
