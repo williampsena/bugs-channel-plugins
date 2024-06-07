@@ -15,13 +15,14 @@ func TestDispatchSuccess(t *testing.T) {
 
 	err := dispatcher.Dispatch(Event{
 		ID:        "foo",
+		RawEvent:  "",
 		ServiceId: "bar",
 		Platform:  "python",
 	})
 
 	require.Nil(t, err)
 
-	assert.Contains(t, buf.String(), "🍔 Ingest Event: {foo bar  python")
+	assert.Contains(t, buf.String(), "🍔 Ingest Event: {foo  bar  python")
 
 	test.ResetCaptureLog()
 }

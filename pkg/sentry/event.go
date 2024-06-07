@@ -13,7 +13,10 @@ const (
 )
 
 // Represents an error when attempting to parse json into a sentry event struct.
-var ErrParseSentryEvent = errors.New("an error occurred while attempting to parse JSON to sentry event")
+var ErrParseSentryEventFromJson = errors.New("an error occurred while attempting to parse JSON to sentry event")
+
+// Represents an error when attempting to parse sentry event to json
+var ErrParseSentryEventToJson = errors.New("an error occurred while attempting to sentry event to JSON")
 
 // Represents an error when sentry event is not implemented yet.
 var ErrEventNotImplemented = errors.New("an error occurred when sentry event is not implemented yet")
@@ -103,7 +106,7 @@ func NewSentryEventMetaFromJson(rawEvent []byte) (*SentryEventMeta, error) {
 	err := json.Unmarshal(rawEvent, &sentryEventMessage)
 
 	if err != nil {
-		return nil, errors.Join(ErrParseSentryEvent, err)
+		return nil, errors.Join(ErrParseSentryEventFromJson, err)
 	}
 
 	return &sentryEventMessage, nil
@@ -116,7 +119,7 @@ func NewSentryEventHeaderFromJson(rawEvent []byte) (*SentryEventHeader, error) {
 	err := json.Unmarshal(rawEvent, &sentryEventMessage)
 
 	if err != nil {
-		return nil, errors.Join(ErrParseSentryEvent, err)
+		return nil, errors.Join(ErrParseSentryEventFromJson, err)
 	}
 
 	return &sentryEventMessage, nil
@@ -164,11 +167,21 @@ func NewSentryEventFromJson(projectId int, eventGroupId string, jsonContent []by
 	err := json.Unmarshal(jsonContent, &sentryEvent)
 
 	if err != nil {
-		return SentryEvent{}, errors.Join(ErrParseSentryEvent, err)
+		return SentryEvent{}, errors.Join(ErrParseSentryEventFromJson, err)
 	}
 
 	sentryEvent.Project = projectId
 	sentryEvent.EventGroupId = eventGroupId
 
 	return sentryEvent, nil
+}
+
+func (s *SentryEvent) ToJson() (string, error) {
+	b, err := json.Marshal(s)
+
+	if err != nil {
+		return "", errors.Join(ErrParseSentryEventToJson, err)
+	}
+
+	return string(b), err
 }

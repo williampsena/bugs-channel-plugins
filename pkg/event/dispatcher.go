@@ -15,6 +15,8 @@ type StackTrace = []map[string]interface{}
 type Event struct {
 	// The event id
 	ID string `json:"event_id"`
+	// The raw event
+	RawEvent string `json:"raw_event"`
 	// The service
 	ServiceId string `json:"service_id"`
 	// The meta event id

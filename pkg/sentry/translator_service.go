@@ -36,7 +36,7 @@ func TranslateEvents(project string, body io.Reader) ([]event.Event, error) {
 	events, err := BuildSentryEvents(projectId, content)
 
 	if err != nil {
-		return nil, ErrParseSentryEvent
+		return nil, ErrParseSentryEventFromJson
 	}
 
 	return parseToLocalEvents(events), nil
@@ -55,8 +55,11 @@ func parseToLocalEvents(sentryEvents []SentryEvent) []event.Event {
 func parseToLocalEvent(sentryEvent *SentryEvent) event.Event {
 	titleAndBody := buildTitleAndBody(sentryEvent)
 
+	json, _ := sentryEvent.ToJson()
+
 	return event.Event{
 		ID:          sentryEvent.ID,
+		RawEvent:    json,
 		ServiceId:   strconv.Itoa(sentryEvent.Project),
 		MetaId:      sentryEvent.EventGroupId,
 		Platform:    sentryEvent.Platform,
