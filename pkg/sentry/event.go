@@ -176,8 +176,8 @@ func NewSentryEventFromJson(projectId int, eventGroupId string, jsonContent []by
 	return sentryEvent, nil
 }
 
-func (s *SentryEvent) ToJson() (string, error) {
-	b, err := json.Marshal(s)
+func (e *SentryEvent) Json() (string, error) {
+	b, err := json.Marshal(e)
 
 	if err != nil {
 		return "", errors.Join(ErrParseSentryEventToJson, err)

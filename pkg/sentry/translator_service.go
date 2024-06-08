@@ -55,7 +55,7 @@ func parseToLocalEvents(sentryEvents []SentryEvent) []event.Event {
 func parseToLocalEvent(sentryEvent *SentryEvent) event.Event {
 	titleAndBody := buildTitleAndBody(sentryEvent)
 
-	json, _ := sentryEvent.ToJson()
+	json, _ := sentryEvent.Json()
 
 	return event.Event{
 		ID:          sentryEvent.ID,
